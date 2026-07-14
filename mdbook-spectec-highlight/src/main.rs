@@ -5,7 +5,16 @@ use regex::Regex;
 use serde_json::Value;
 use std::io::{self, Read};
 use std::process;
+use tree_sitter::Language;
 use tree_sitter_highlight::{HighlightConfiguration, HighlightEvent, Highlighter};
+
+unsafe extern "C" {
+    fn tree_sitter_spectec() -> *const ();
+}
+
+fn spectec_language() -> Language {
+    unsafe { Language::from_raw(tree_sitter_spectec() as _) }
+}
 
 const HIGHLIGHTS_QUERY: &str = include_str!("../highlights.scm");
 
@@ -44,7 +53,7 @@ impl Preprocessor for SpectecHighlight {
 
     fn run(&self, _ctx: &PreprocessorContext, mut book: Book) -> Result<Book> {
         let mut highlighter = Highlighter::new();
-        let language = tree_sitter_spectec::LANGUAGE.into();
+        let language = spectec_language();
         let mut config =
             HighlightConfiguration::new(language, "spectec", HIGHLIGHTS_QUERY, "", "")
                 .expect("failed to create highlight config");
