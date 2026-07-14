@@ -1,0 +1,10 @@
+[book]
+title = "End-to-end tutorial writing a Nano-P4 specification with P4-SpecTec"
+authors = ["Haechan Kwon"]
+language = "en"
+
+[output.html]
+additional-css = ["theme/spectec.css"]
+
+[preprocessor.spectec-highlight]
+command = "mdbook-spectec-highlight/target/debug/mdbook-spectec-highlight"
