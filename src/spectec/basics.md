@@ -252,7 +252,7 @@ Here the relation premise `Check_expr` runs first and binds `t`, then the
 ## Hints
 
 Hints are metadata annotations that guide the *prose backend* when generating
-human-readable documentation. They do not affect typechecking or execution.
+human-readable documentation.
 
 ```spectec
 relation Eval_expr:
