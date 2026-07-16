@@ -1,8 +1,13 @@
 /* https://github.com/catppuccin/catppuccin */
 
 pre.spectec {
-    padding: 1em;
+    position: relative;
     overflow-x: auto;
+}
+
+pre.spectec > code {
+    display: block;
+    padding: 1rem;
 }
 
 /* Catppuccin Latte */
