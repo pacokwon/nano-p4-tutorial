@@ -4,8 +4,6 @@ P4-SpecTec specifications are written in `.watsup` files using a custom DSL.
 This section walks through the core constructs of that DSL using examples from
 the [SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6),
 which specifies *Typed Imp*, a small typed imperative language.
-Detailed instructions can be found in the tutorial link, so feel free to follow
-along.
 
 ## Comments
 
@@ -38,7 +36,7 @@ For example, `INT` in the Typed Imp spec is a syntax constructor defined with
 
 ## Options and Lists
 
-Option types are written by appending `?` to a sort. The absent case is `eps`,
+Option types are written by appending `?` to a type. The absent case is `eps`,
 and a present value is written directly:
 
 ```spectec
@@ -49,7 +47,7 @@ def $lookup<K, V>((K_h -> V_h)::_, K_query) = V_h
   -- if K_h = K_query                    ;; present: return the value
 ```
 
-A `-- if` premise can match on an option result:
+An `if` premise can match on an option result:
 
 ```spectec
 rule Check_expr/id:
@@ -57,7 +55,7 @@ rule Check_expr/id:
   -- if $lookup<id, type>(tenv, x) = t   ;; binds t if present, fails if eps
 ```
 
-List types are written by appending `*` to a sort. The empty list is `eps`,
+List types are written by appending `*` to a type. The empty list is `eps`,
 and `::` is the cons operator:
 
 ```spectec
@@ -107,14 +105,14 @@ syntax expr =
 ```
 
 Each alternative is prefixed with `|`. Names starting with a lowercase letter
-(like `int`, `bool`) refer to built-in or previously declared syntax sorts.
-Uppercase names (like `INT`, `BOOL`) are constructor tags.
-Backtick-prefixed tokens (like `` `NUM ``, `` `-> ``, `` `+ ``) are concrete
-surface syntax tokens.
+refer to built-in types or *non-terminals*, which are built-in or previously
+declared syntax types.
+Uppercase names (like `INT`, `BOOL`) and backtick-prefixed tokens
+(like `` `NUM ``, `` `-> ``, `` `+ ``) are *terminals*.
 
 ## Meta-variables
 
-The `var` keyword declares metavariables and their sorts. These act as
+The `var` keyword declares metavariables and their types. These act as
 shorthands: wherever `e` appears unbound in a rule, it is implicitly typed as
 `expr`.
 
@@ -125,6 +123,31 @@ var x : id
 var e : expr
 var c : command
 var t : type
+```
+
+A variable's type is inferred from its name by stripping a trailing suffix
+that begins at the first `_` or `'` character. For example, given `var e : expr`,
+the following names are all valid `expr` variables:
+
+```spectec
+rule Check_expr/add:
+  tenv |- e_l `+ e_r : INT   ;; e_l, e_r -> strip at '_' -> e : expr
+  -- Check_expr: tenv |- e_l : INT
+  -- Check_expr: tenv |- e_r : INT
+
+rule Check_expr/not:
+  tenv |- `! e' : BOOL        ;; e' -> strip at '\'' -> e : expr
+  -- Check_expr: tenv |- e' : BOOL
+```
+
+A suffix of only underscores (`e__`) or a purely alphanumeric suffix without
+a separator (`eLeft`) does not strip, so those would not be recognized as
+`expr` variables and would cause an error:
+
+```spectec
+rule Check_expr/not:
+  tenv |- `! eLeft : BOOL     ;; ERROR: eLeft does not resolve to a known variable
+  -- Check_expr: tenv |- eLeft : BOOL
 ```
 
 ## Function Declarations and Definitions
@@ -155,8 +178,8 @@ A few things to note:
 - Angle brackets introduce type parameters (e.g. `<K, V>`). They must be made
   explicit in function calls.
 - The return type `V?` means an optional value (`eps` represents the absent case).
-- Each `def` case can have side conditions introduced with `-- if`, or a
-  catch-all `-- otherwise`.
+- Each `def` case can have side conditions introduced with `if`, or a
+  catch-all `otherwise`.
 - On function call, each clause is evaluated from top to bottom. If pattern match
   fails or `if` premises are not satisfied, the clause *fails* and tries the next
   clause.
@@ -247,7 +270,25 @@ rule Check_command/assign:
 ```
 
 Here the relation premise `Check_expr` runs first and binds `t`, then the
-`-- if` premise checks that `x` is already declared with that same type.
+`if` premise checks that `x` is already declared with that same type.
+
+## Iteration
+
+The `(pattern)*` syntax applies a pattern element-wise over a list.
+
+For example, the following clause (from the nano-p4 spec) extracts the third
+component of every element in `parameterIR*` into a new list `nameIR*`:
+
+```spectec
+def $distinct_params(parameterIR*)
+  = $distinct_<nameIR>(nameIR*)
+  -- if (_ _ nameIR = parameterIR)*
+```
+
+The `if` premise runs the pattern `_ _ nameIR = parameterIR` once per element,
+binding `nameIR` at each position and collecting the results into `nameIR*`.
+
+More advanced usages of iteration are to be demonstrated further into the tutorial.
 
 ## Hints
 
@@ -272,3 +313,8 @@ syntax literal =
 ```
 
 We will cover the prose backend in more detail later in this tutorial.
+
+## Exercise
+
+If you're interested in a more hands-on introduction, we strongly
+recommend you to go and complete the [SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6).
