@@ -10,7 +10,7 @@
   - [Scope of Nano-P4](./nano-p4/scope.md)
   - [NanoSwitch Architecture](./nano-p4/nano-switch.md)
   - [Test Suite](./nano-p4/test-suite.md)
-- [Static Semantics]()
+- [Static Semantics](./static/README.md)
 - [Dynamic Semantics]()
 - [Tips for Debugging]()
 - [Generating Prose Specification]()
