@@ -4,7 +4,10 @@ authors = ["Haechan Kwon"]
 language = "en"
 
 [output.html]
-additional-css = ["theme/spectec.css"]
+additional-css = ["theme/catppuccin.css", "theme/spectec.css", "theme/p4.css"]
 
 [preprocessor.spectec-highlight]
 command = "mdbook-spectec-highlight/target/debug/mdbook-spectec-highlight"
+
+[preprocessor.p4-highlight]
+command = "mdbook-p4-highlight/target/debug/mdbook-p4-highlight"
