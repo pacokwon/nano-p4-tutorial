@@ -1,5 +1,3 @@
-/* https://github.com/catppuccin/catppuccin */
-
 pre.spectec {
     position: relative;
     overflow-x: auto;
@@ -14,55 +12,7 @@ pre.spectec > code {
 .light pre.spectec code,
 .rust pre.spectec code { color: #4c4f69; }
 
-.light .hl-keyword,             .rust .hl-keyword             { color: #8839ef; }
-.light .hl-type,                .rust .hl-type                { color: #04a5e5; }
-.light .hl-type-definition,     .rust .hl-type-definition     { color: #04a5e5; font-weight: bold; }
-.light .hl-type-builtin,        .rust .hl-type-builtin        { color: #1e66f5; }
-.light .hl-type-parameter,      .rust .hl-type-parameter      { color: #fe640b; }
-.light .hl-constructor,         .rust .hl-constructor         { color: #8839ef; }
-.light .hl-function,            .rust .hl-function            { color: #1e66f5; }
-.light .hl-function-call,       .rust .hl-function-call       { color: #1e66f5; }
-.light .hl-string,              .rust .hl-string              { color: #40a02b; }
-.light .hl-string-special,      .rust .hl-string-special      { color: #179299; }
-.light .hl-number,              .rust .hl-number              { color: #fe640b; }
-.light .hl-comment,             .rust .hl-comment             { color: #9ca0b0; font-style: italic; }
-.light .hl-operator,            .rust .hl-operator            { color: #04a5e5; }
-.light .hl-label,               .rust .hl-label               { color: #d20f39; }
-.light .hl-attribute,           .rust .hl-attribute           { color: #df8e1d; }
-.light .hl-constant-builtin,    .rust .hl-constant-builtin    { color: #fe640b; font-weight: bold; }
-.light .hl-variable,            .rust .hl-variable            { color: #4c4f69; }
-.light .hl-variable-member,     .rust .hl-variable-member     { color: #4c4f69; }
-.light .hl-variable-parameter,  .rust .hl-variable-parameter  { color: #fe640b; }
-.light .hl-punctuation-bracket,       .rust .hl-punctuation-bracket       { color: #7c7f93; }
-.light .hl-punctuation-bracket-open,  .rust .hl-punctuation-bracket-open  { color: #7c7f93; }
-.light .hl-punctuation-bracket-close, .rust .hl-punctuation-bracket-close { color: #7c7f93; }
-.light .hl-punctuation-delimiter,     .rust .hl-punctuation-delimiter     { color: #7c7f93; }
-
 /* Catppuccin Mocha */
 .coal pre.spectec code,
 .navy pre.spectec code,
 .ayu pre.spectec code { color: #cdd6f4; }
-
-.coal .hl-keyword,             .navy .hl-keyword,             .ayu .hl-keyword             { color: #cba6f7; }
-.coal .hl-type,                .navy .hl-type,                .ayu .hl-type                { color: #89dceb; }
-.coal .hl-type-definition,     .navy .hl-type-definition,     .ayu .hl-type-definition     { color: #89dceb; font-weight: bold; }
-.coal .hl-type-builtin,        .navy .hl-type-builtin,        .ayu .hl-type-builtin        { color: #89b4fa; }
-.coal .hl-type-parameter,      .navy .hl-type-parameter,      .ayu .hl-type-parameter      { color: #fab387; }
-.coal .hl-constructor,         .navy .hl-constructor,         .ayu .hl-constructor         { color: #cba6f7; }
-.coal .hl-function,            .navy .hl-function,            .ayu .hl-function            { color: #89b4fa; }
-.coal .hl-function-call,       .navy .hl-function-call,       .ayu .hl-function-call       { color: #89b4fa; }
-.coal .hl-string,              .navy .hl-string,              .ayu .hl-string              { color: #a6e3a1; }
-.coal .hl-string-special,      .navy .hl-string-special,      .ayu .hl-string-special      { color: #94e2d5; }
-.coal .hl-number,              .navy .hl-number,              .ayu .hl-number              { color: #fab387; }
-.coal .hl-comment,             .navy .hl-comment,             .ayu .hl-comment             { color: #6c7086; font-style: italic; }
-.coal .hl-operator,            .navy .hl-operator,            .ayu .hl-operator            { color: #89dceb; }
-.coal .hl-label,               .navy .hl-label,               .ayu .hl-label               { color: #f38ba8; }
-.coal .hl-attribute,           .navy .hl-attribute,           .ayu .hl-attribute           { color: #f9e2af; }
-.coal .hl-constant-builtin,    .navy .hl-constant-builtin,    .ayu .hl-constant-builtin    { color: #fab387; font-weight: bold; }
-.coal .hl-variable,            .navy .hl-variable,            .ayu .hl-variable            { color: #cdd6f4; }
-.coal .hl-variable-member,     .navy .hl-variable-member,     .ayu .hl-variable-member     { color: #cdd6f4; }
-.coal .hl-variable-parameter,  .navy .hl-variable-parameter,  .ayu .hl-variable-parameter  { color: #fab387; }
-.coal .hl-punctuation-bracket,       .navy .hl-punctuation-bracket,       .ayu .hl-punctuation-bracket       { color: #7f849c; }
-.coal .hl-punctuation-bracket-open,  .navy .hl-punctuation-bracket-open,  .ayu .hl-punctuation-bracket-open  { color: #7f849c; }
-.coal .hl-punctuation-bracket-close, .navy .hl-punctuation-bracket-close, .ayu .hl-punctuation-bracket-close { color: #7f849c; }
-.coal .hl-punctuation-delimiter,     .navy .hl-punctuation-delimiter,     .ayu .hl-punctuation-delimiter     { color: #7f849c; }

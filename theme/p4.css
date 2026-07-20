@@ -1,0 +1,18 @@
+pre.p4 {
+    position: relative;
+    overflow-x: auto;
+}
+
+pre.p4 > code {
+    display: block;
+    padding: 1rem;
+}
+
+/* Catppuccin Latte */
+.light pre.p4 code,
+.rust pre.p4 code { color: #4c4f69; }
+
+/* Catppuccin Mocha */
+.coal pre.p4 code,
+.navy pre.p4 code,
+.ayu pre.p4 code { color: #cdd6f4; }

@@ -1,0 +1,16 @@
+[package]
+name = "mdbook-p4-highlight"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+mdbook-core = "0.5"
+mdbook-preprocessor = "0.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tree-sitter = "0.25"
+tree-sitter-highlight = "0.25"
+regex = "1"
+
+[build-dependencies]
+cc = "1"
