@@ -1,9 +1,11 @@
 # Basics
 
-P4-SpecTec specifications are written in `.watsup` files using a custom DSL.
+P4-SpecTec specifications are written in `.watsup` files using the P4-SpecTec language.
 This section walks through the core constructs of that DSL using examples from
 the [SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6),
 which specifies *Typed Imp*, a small typed imperative language.
+For constructs not featured in *Typed Imp*, the nano-p4 specification may be
+used as examples.
 
 ## Comments
 
@@ -91,6 +93,76 @@ rule Check_command/decl:
 
 Here `(x -> t)::tenv` constructs a new context with the binding `x -> t`
 prepended to the existing context `tenv`.
+
+## Tuples
+
+A tuple is an anonymous product of two or more values, written with parentheses
+and commas: `(A, B)`.
+Tuples do not need to be declared as a named `syntax`; they can appear inline
+wherever a type or value is expected.
+
+The most common use is as the element type of a list.
+For example, `$assoc_` in the stdlib takes a list of pairs as its second argument:
+
+```spectec
+builtin dec $assoc_<X, Y>(X, (X, Y)*) : Y?
+```
+
+Here `(X, Y)*` is a list of `(X, Y)` tuples.
+
+Tuples also appear as values constructed on the fly in premises.
+The member access rules in the Nano-P4 spec build a list of `(id, typeIR)` pairs
+to pass to `$assoc_`:
+
+```spectec
+-- if typeIR = $assoc_<id, typeIR>(id_member, (id_field, typeIR_field)*)
+```
+
+The iteration `(id_field, typeIR_field)*` zips two parallel lists into a
+list of pairs.
+
+## Records
+
+A record is a product type with named, labeled fields.
+It is declared with braces and comma-separated `LABEL value` pairs:
+
+```spectec
+syntax globalTypingLayer =
+  { TYPE     typeDefEnv,
+    CALLABLE callableTypeDefEnv,
+    FRAME    typeFrame }
+```
+
+Record values are constructed with the same brace notation:
+
+```spectec
+-- if globalTypingLayer
+    = { TYPE $empty_typeDefEnv,
+        CALLABLE $empty_callableTypeDefEnv,
+        FRAME $empty_typeFrame }
+```
+
+Fields are accessed with dot notation:
+
+```spectec
+-- if typeFrame = TC.GLOBAL.FRAME
+```
+
+Paths can be chained (`TC.GLOBAL.FRAME`) to reach fields of nested records.
+
+Records are updated functionally with bracket notation.
+`x[.FIELD = v]` produces a copy of `x` with the named field replaced:
+
+```spectec
+def $enter_t(TC)
+  = TC[ .LOCAL.FRAMES = $empty_typeFrame :: TC.LOCAL.FRAMES ]
+```
+
+Nested fields can be updated in a single expression as well:
+
+```spectec
+-- if TC' = TC[.GLOBAL.FRAME = typeFrame']
+```
 
 ## Syntax Definitions
 
