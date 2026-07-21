@@ -1,6 +1,7 @@
 # Scope of Nano-P4
 
 This section describes what Nano-P4 includes and what it leaves out.
+For a reference of Nano-P4's grammar, consult [Appendix A: Nano-P4 Grammar](./grammar.md)
 
 ## What Nano-P4 includes
 
