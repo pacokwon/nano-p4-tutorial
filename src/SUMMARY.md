@@ -15,6 +15,7 @@
 - [Static Semantics](./static/README.md)
   - [Typing Context](./static/typing-context.md)
   - [Types](./static/types.md)
+  - [Expressions and L-values](./static/expressions-lvalues.md)
 - [Dynamic Semantics]()
 - [Tips for Debugging]()
 - [Generating Prose Specification]()

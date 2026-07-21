@@ -51,7 +51,7 @@ dec $forall_(bool*) : bool
 
 ## Sets
 
-A set is written as `{ K* }`. a collection of unique keys with no ordering.
+A set is written as `` `{ K* } ``. a collection of unique keys with no ordering.
 
 ```spectec
 dec $empty_set<K> : set<K>

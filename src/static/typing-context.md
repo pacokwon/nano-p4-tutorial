@@ -176,8 +176,7 @@ Check out the exercise branch in the `spec` submodule:
 git -C nano-p4/spec checkout exercise/3.1
 ```
 
-Something is wrong in `5.00-typing-context.watsup`.
-Run the following test to observe the failure:
+Run the following test to observe a failure:
 
 ```shell
 ./nano-p4spectec check nano-p4/spec/*.watsup -i nano-p4/include -p nano-p4/testdata/exercise/3.1.p4

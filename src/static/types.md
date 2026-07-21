@@ -234,7 +234,7 @@ Tables are compared by name, consistent with the other data types.
 
 ## Exercise
 
-**Branch:** `exercise/3.2`
+**Branch:** [`exercise/3.2`](https://github.com/pacokwon/nano-p4-spec/tree/exercise/3.2)
 
 Check out the exercise branch in the `spec` submodule:
 
