@@ -13,3 +13,4 @@ In this section, we will cover the following:
 - **Installation**: how to build and install P4-SpecTec
 - **Basics**: the core syntax and constructs of P4-SpecTec
 - **Workflow**: how to run the toolchain and interpret its output
+- **Standard Library**: the built-in utility functions used throughout the spec
