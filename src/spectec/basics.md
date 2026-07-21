@@ -70,6 +70,17 @@ def $lookup<K, V>((K_h -> V_h)::(K_t -> V_t)*, K_query) = V_h
   -- if K_h = K_query
 ```
 
+A single-element list is written `[ x ]`, and lists are concatenated with `++`.
+Here's one example from the Nano-P4 spec:
+
+```spectec
+def $flatten_parameterList(parameter) = [ parameter ]
+def $flatten_parameterList(nonEmptyParameterList `, parameter)
+  = $flatten_parameterList(nonEmptyParameterList) ++ [ parameter ]
+```
+
+A multi-element list literal `[ a, b, c ]` is also valid.
+
 Lists also appear in rule conclusions and premises to prepend an entry to a context:
 
 ```spectec
@@ -149,6 +160,53 @@ rule Check_expr/not:
   tenv |- `! eLeft : BOOL     ;; ERROR: eLeft does not resolve to a known variable
   -- Check_expr: tenv |- eLeft : BOOL
 ```
+
+## Meta-level Operators
+
+P4-SpecTec provides a set of operators that work on meta-level values (the
+`bool`, `int`, and `nat` primitives), distinct from the operators of the target
+language being specified.
+
+**Boolean operators** work on `bool` meta-values:
+
+| Operator | Meaning |
+|----------|---------|
+| `~b`     | logical not |
+| `b1 /\ b2` | logical and |
+| `b1 \/ b2` | logical or |
+| `b1 = b2`  | equality |
+
+These appear in function bodies and `if` premises:
+
+```spectec
+def $bin_op(`&&, `B b_l, `B b_r) = `B (b_l /\ b_r)
+def $bin_op(`||, `B b_l, `B b_r) = `B (b_l \/ b_r)
+def $bin_op(`!=, value_l, value_r) = `B (~$bin_eq(value_l, value_r))
+
+-- if direction = OUT \/ direction = INOUT
+```
+
+Note the distinction: `` `&& `` and `` `|| `` are *target-language terminals*
+(P4 operators in the syntax tree), while `/\` and `\/` are *meta-level*
+boolean operators used to write the spec itself.
+
+**Arithmetic expressions** on `int` and `nat` meta-values are written inside
+`$( ... )`:
+
+```spectec
+-- if i' = $($pow2(w) - i - 1)
+-- if n'  = $(n - 1)
+```
+
+The `$( ... )` delimiter signals that the expression inside uses meta-level
+arithmetic rather than the target language's expression grammar.
+
+**List length** is written with `| ... |`:
+
+```spectec
+-- if |fieldValue_a*| = |fieldValue_b*|
+```
+
 
 ## Function Declarations and Definitions
 
@@ -271,6 +329,47 @@ rule Check_command/assign:
 
 Here the relation premise `Check_expr` runs first and binds `t`, then the
 `if` premise checks that `x` is already declared with that same type.
+
+## Rule Groups
+
+When several rules share the same conclusion shape but differ only in their
+premises, they can be grouped under a single `rulegroup` heading.
+This is purely organizational: the toolchain treats each case inside a
+`rulegroup` as an independent rule.
+
+For example, the typing rules for unary expressions in the nano-p4 spec are
+written as a rule group:
+
+```spectec
+rulegroup Expr_ok/unaryExpression {
+
+  rule Expr_ok/boolean:
+    scope TC |- `! expression : BOOL
+    -- Expr_ok: scope TC |- expression : BOOL
+
+  rule Expr_ok/integer:
+    scope TC |- unop expression : integerTypeIR
+    -- if unop <- [ `~, `-, `+ ]
+    -- Expr_ok: scope TC |- expression : integerTypeIR
+
+}
+```
+
+The outer `rulegroup Expr_ok/unaryExpression { ... }` names the group but
+adds no semantics.
+Each `rule` inside is a full, independent rule with its own name and premises.
+
+## Set Membership
+
+The `<-` premise tests whether a value belongs to a list used as a set.
+It succeeds if the value matches any element and fails otherwise.
+
+```spectec
+rule Expr_ok/integer:
+  scope TC |- unop expression : integerTypeIR
+  -- if unop <- [ `~, `-, `+ ]
+  -- Expr_ok: scope TC |- expression : integerTypeIR
+```
 
 ## Iteration
 
