@@ -9,14 +9,22 @@ In this section, we read through the static semantics specification of Nano-P4
 piece by piece.
 We will not build the spec from scratch. Instead, we will take a functioning spec
 apart and understand what it means. But don't worry! There are curated exercises
-for you at the end of every subsection.
+for you at the end of every subsection, where you will debug or extend a
+faulty version of the spec.
 Each subsection explains what a piece of the spec says, why it is written that
 way, and how it connects to the P4-SpecTec constructs you saw in the previous
 section.
-As mentioned previously, at the end of each subsection there is a short exercise
-where you will debug or extend a deliberately broken version of the spec.
 
-In this section, we cover the following:
+At the end of this section, we will end up with a relation that typechecks an
+entire program:
+
+```spectec
+relation Program_ok:
+  |- program -| typingContext
+  hint(input %0)
+```
+
+More specifically, we will cover the following topics:
 
 - **Typing Context**: the data structures that hold type information as the
   checker walks the program

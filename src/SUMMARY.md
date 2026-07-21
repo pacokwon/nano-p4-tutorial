@@ -13,6 +13,8 @@
   - [NanoSwitch Architecture](./nano-p4/nano-switch.md)
   - [Test Suite](./nano-p4/test-suite.md)
 - [Static Semantics](./static/README.md)
+  - [Typing Context](./static/typing-context.md)
+  - [Types](./static/types.md)
 - [Dynamic Semantics]()
 - [Tips for Debugging]()
 - [Generating Prose Specification]()
