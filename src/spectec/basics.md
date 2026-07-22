@@ -461,9 +461,9 @@ binding `nameIR` at each position and collecting the results into `nameIR*`.
 
 More advanced usages of iteration are to be demonstrated further into the tutorial.
 
-## Hints
+## Prose Hints
 
-Hints are metadata annotations that guide the *prose backend* when generating
+*Prose hints* are metadata annotations that guide the *prose backend* when generating
 human-readable documentation.
 
 ```spectec

@@ -10,6 +10,7 @@ The relation defined in `5.03` is `Expr_ok`:
 ```spectec
 relation Expr_ok:
   scope typingContext |- expression : typeIR
+  hint(input %0 %1 %2)
 ```
 
 Read `scope TC |- e : T` as: "under context `TC` at scope `scope`, expression `e`
@@ -233,6 +234,7 @@ an expression qualifies as an l-value and what type it holds:
 ```spectec
 relation Lvalue_ok:
   scope typingContext |- lvalue : typeIR
+  hint(input %0 %1 %2)
 ```
 
 Only three forms of l-values exist in Nano-P4:

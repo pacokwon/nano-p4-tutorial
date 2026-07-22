@@ -17,6 +17,7 @@ representation (`typeIR`).
 ```spectec
 relation Type_ok:
   typingContext |- type ~> typeIR
+  hint(input %0 %1)
 ```
 
 Read `TC |- t ~> typeIR` as: "in context `TC`, the type `t` elaborates to the
@@ -109,6 +110,7 @@ Each carries its name and its parameter list (or method map, for externs).
 ```spectec
 relation Type_eq:
   typeIR ~~ typeIR
+  hint(input %0 %1)
 ```
 
 Read `typeIR_a ~~ typeIR_b` as: "`typeIR_a` and `typeIR_b` are equal types."
