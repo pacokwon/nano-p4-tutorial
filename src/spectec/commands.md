@@ -145,7 +145,7 @@ files without a matching `.stf` are silently skipped.
 |------|---------|
 | Check spec syntax | `./nano-p4spectec elab nano-p4/spec/*.watsup` |
 | Parse a P4 file | `./nano-p4spectec parse -p <file> -t -i nano-p4/include` |
-| Typecheck a program | `./nano-p4spectec run nano-p4/spec/*.watsup -i nano-p4/include -rel Program_ok -p <file>` |
+| Type-check a program | `./nano-p4spectec run nano-p4/spec/*.watsup -i nano-p4/include -rel Program_ok -p <file>` |
 | Execute with packets | `./nano-p4spectec sim nano-p4/spec/*.watsup -i nano-p4/include -p <file> -stf <stf>` |
 | Batch typecheck test | `./nano-p4spectec test-check nano-p4/spec/*.watsup -i nano-p4/include -p4-dir <dir>` |
 | Batch execution test | `./nano-p4spectec test-eval nano-p4/spec/*.watsup -i nano-p4/include -p4-dir <dir>` |

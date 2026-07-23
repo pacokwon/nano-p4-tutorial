@@ -35,7 +35,7 @@ outputs.
 ## Step 1: Elaborate the spec
 
 The `.watsup` files are parsed and *elaborated* into *IL* (Internal Language),
-a typechecked and desugared representation of the spec that the interpreter
+a type-checked and desugared representation of the spec that the interpreter
 executes directly.
 
 *Elaboration* checks that the spec itself
@@ -114,7 +114,7 @@ $ ./nano-p4spectec run nano-p4/spec/*.watsup \
 ```
 
 For example, this command takes a `.p4` program, converts it to an IL value, and
-passes it to the `Program_ok` relation. The `Program_ok` relation typechecks an
+passes it to the `Program_ok` relation. The `Program_ok` relation type-checks an
 entire program. Therefore, we are executing the typechecker against a program.
 
 ## What this means in practice

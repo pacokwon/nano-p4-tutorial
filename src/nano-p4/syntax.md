@@ -308,4 +308,4 @@ flat `declaration*` that the rest of the spec consumes.
 
 With this syntax definition in hand, the type checker and evaluator can refer
 to every Nano-P4 construct by name, and the spec stays readable as the rules
-grow more complex in the sections ahead.
+grow more complex in the chapters ahead.

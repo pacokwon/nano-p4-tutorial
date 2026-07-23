@@ -2,7 +2,7 @@
 
 A test suite for Nano-P4 lives in `nano-p4/testdata/` and is split into two directories:
 
-- `positive/`: 32 nano-p4 programs that are expected to typecheck and produce
+- `positive/`: 32 nano-p4 programs that are expected to type-check and produce
                correct output
 - `negative/`: 21 nano-p4 programs that are expected to be rejected by the type
                checker
@@ -107,7 +107,7 @@ type system does not allow.
 
 ## Running the suite
 
-Run all positive tests (typecheck + simulate):
+Run all positive tests (type-check + simulate):
 
 ```shell
 $ ./nano-p4spectec test-check nano-p4/spec/*.watsup \

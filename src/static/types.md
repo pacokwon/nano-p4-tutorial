@@ -20,8 +20,8 @@ relation Type_ok:
   hint(input %0 %1)
 ```
 
-Read `TC |- t ~> typeIR` as: "in context `TC`, the type `t` elaborates to the
-internal type `typeIR`."
+Read `typingContext |- type ~> typeIR` as: "under `typingContext`,
+the type `type` elaborates to the internal type `typeIR`."
 
 For base types, the rule is trivial: the surface type is already its own
 internal representation.

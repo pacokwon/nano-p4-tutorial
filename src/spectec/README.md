@@ -8,7 +8,7 @@ By writing dynamic semantics rules, you get a reference interpreter.
 The *prose backend* also allows one to generate a human-readable documentation
 from a specification written in P4-SpecTec.
 
-In this section, we will cover the following:
+In this chapter, we will cover the following:
 
 - **Installation**: how to build and install P4-SpecTec
 - **Basics**: the core syntax and constructs of P4-SpecTec

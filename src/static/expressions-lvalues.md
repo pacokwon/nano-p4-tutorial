@@ -39,6 +39,8 @@ rule Expr_ok/integer-signed:
   scope TC |- nat S int : INT `< nat >
 ```
 
+As for what `TC` means, refer to [The `TC` Meta-variable](./typing-context.md#the-tc-meta-variable).
+
 ## Reference Expressions
 
 A reference expression is just a name used as a value:

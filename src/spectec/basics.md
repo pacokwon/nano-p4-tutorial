@@ -326,7 +326,7 @@ builtin dec $sum_nat(nat*) : nat
 A *relation* defines the signature for a set of *rules*.
 
 ```spectec
-;; Typecheck `expr` under context `tenv`
+;; Type-check `expr` under context `tenv`
 relation Check_expr:
   tenv |- expr : type
   hint(input %0 %1)

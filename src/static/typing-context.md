@@ -133,11 +133,11 @@ visible in the enclosing block.
 
 There are three adder families:
 
-- `$add_var_t(scope, TC, id, varTypeIR)`: adds a variable to a frame
-- `$add_callableDef_t(TC, callableId, callableTypeDef)`: adds an action, parser,
-  or control to the callable env
-- `$add_typeDef_t(TC, typeId, typeDefIR)`: adds a struct, header, extern, or
-  other type to the type def env
+- `$add_var_t(scope, typingContext, id, varTypeIR)`: adds a variable to a frame
+- `$add_callableDef_t(typingContext, callableId, callableTypeDef)`:
+  adds an action, parser, or control to the callable env
+- `$add_typeDef_t(typingContext, typeId, typeDefIR)`:
+  adds a struct, header, extern, or other type to the type def env
 
 The latter two always write to the global layer, so they take no `scope` argument.
 
