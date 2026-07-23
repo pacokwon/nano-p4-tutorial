@@ -166,6 +166,21 @@ the variable is not in the block frame.
 This chain means a local variable can shadow a block parameter, and a block
 parameter can shadow a global variable.
 
+## The `TC` Meta-variable
+
+After the syntax definitions, `5.00` also declares:
+
+```spectec
+var TC : typingContext
+```
+
+`TC` is shorthand for the typing context that gets threaded through nearly every
+rule in the static semantics. Rather than writing `typingContext` in full each
+time, the spec declares `TC` once as a *typed meta-variable* of type
+`typingContext`. The elaborator then recognizes `TC`, `TC'`, `TC_1`, and any
+other suffix variant as standing for a value of that type, wherever they appear
+in rule bodies or function definitions across all spec files.
+
 ## Exercise
 
 **Branch:** [`exercise/3.1`](https://github.com/pacokwon/nano-p4-spec/tree/exercise/3.1)
