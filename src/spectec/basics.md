@@ -1,17 +1,17 @@
 # Basics
 
-P4-SpecTec specifications are written in `.watsup` files using the P4-SpecTec language.
-This section walks through the core constructs of that DSL using examples from
-the [SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6),
-which specifies *Typed Imp*, a small typed imperative language.
-For constructs not featured in *Typed Imp*, the nano-p4 specification may be
-used as examples.
+P4-SpecTec specifications are written in `.watsup` files using the P4-SpecTec
+language. This section walks through the core constructs of that DSL using
+examples from the
+[SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6),
+which specifies _Typed Imp_, a small typed imperative language. For constructs
+not featured in _Typed Imp_, the nano-p4 specification may be used as examples.
 
 ## Comments
 
 Single-line comments start with `;;`. Additional semicolons (`;;;`, `;;;;`, ...)
-are used by convention to indicate heading levels in the document structure,
-but have no semantic difference.
+are used by convention to indicate heading levels in the document structure, but
+have no semantic difference.
 
 ```spectec
 ;;--------------------
@@ -24,16 +24,16 @@ but have no semantic difference.
 
 P4-SpecTec has the following primitive types:
 
-| Type   | Description                        |
-|--------|------------------------------------|
-| `bool` | Boolean (`true` or `false`)        |
-| `int`  | Arbitrary-precision integer        |
-| `nat`  | Non-negative integer               |
-| `text` | String                             |
+| Type   | Description                 |
+| ------ | --------------------------- |
+| `bool` | Boolean (`true` or `false`) |
+| `int`  | Arbitrary-precision integer |
+| `nat`  | Non-negative integer        |
+| `text` | String                      |
 
 These are the types used in meta-variable declarations and function signatures.
-They are distinct from the types of the target language being specified.
-For example, `INT` in the Typed Imp spec is a syntax constructor defined with
+They are distinct from the types of the target language being specified. For
+example, `INT` in the Typed Imp spec is a syntax constructor defined with
 `syntax`, not the primitive `int` of the DSL itself.
 
 ## Options and Lists
@@ -57,8 +57,8 @@ rule Check_expr/id:
   -- if $lookup<id, type>(tenv, x) = t   ;; binds t if present, fails if eps
 ```
 
-List types are written by appending `*` to a type. The empty list is `eps`,
-and `::` is the cons operator:
+List types are written by appending `*` to a type. The empty list is `eps`, and
+`::` is the cons operator:
 
 ```spectec
 syntax map<K,V> = (pair<K,V>)*
@@ -83,7 +83,8 @@ def $flatten_parameterList(nonEmptyParameterList `, parameter)
 
 A multi-element list literal `[ a, b, c ]` is also valid.
 
-Lists also appear in rule conclusions and premises to prepend an entry to a context:
+Lists also appear in rule conclusions and premises to prepend an entry to a
+context:
 
 ```spectec
 rule Check_command/decl:
@@ -97,12 +98,11 @@ prepended to the existing context `tenv`.
 ## Tuples
 
 A tuple is an anonymous product of two or more values, written with parentheses
-and commas: `(A, B)`.
-Tuples do not need to be declared as a named `syntax`; they can appear inline
-wherever a type or value is expected.
+and commas: `(A, B)`. Tuples do not need to be declared as a named `syntax`;
+they can appear inline wherever a type or value is expected.
 
-The most common use is as the element type of a list.
-For example, `$assoc_` in the stdlib takes a list of pairs as its second argument:
+The most common use is as the element type of a list. For example, `$assoc_` in
+the stdlib takes a list of pairs as its second argument:
 
 ```spectec
 builtin dec $assoc_<X, Y>(X, (X, Y)*) : Y?
@@ -110,21 +110,21 @@ builtin dec $assoc_<X, Y>(X, (X, Y)*) : Y?
 
 Here `(X, Y)*` is a list of `(X, Y)` tuples.
 
-Tuples also appear as values constructed on the fly in premises.
-The member access rules in the Nano-P4 spec build a list of `(id, typeIR)` pairs
-to pass to `$assoc_`:
+Tuples also appear as values constructed on the fly in premises. The member
+access rules in the Nano-P4 spec build a list of `(id, typeIR)` pairs to pass to
+`$assoc_`:
 
 ```spectec
 -- if typeIR = $assoc_<id, typeIR>(id_member, (id_field, typeIR_field)*)
 ```
 
-The iteration `(id_field, typeIR_field)*` zips two parallel lists into a
-list of pairs.
+The iteration `(id_field, typeIR_field)*` zips two parallel lists into a list of
+pairs.
 
 ## Records
 
-A record is a product type with named, labeled fields.
-It is declared with braces and comma-separated `LABEL value` pairs:
+A record is a product type with named, labeled fields. It is declared with
+braces and comma-separated `LABEL value` pairs:
 
 ```spectec
 syntax globalTypingLayer =
@@ -150,8 +150,8 @@ Fields are accessed with dot notation:
 
 Paths can be chained (`TC.GLOBAL.FRAME`) to reach fields of nested records.
 
-Records are updated functionally with bracket notation.
-`x[.FIELD = v]` produces a copy of `x` with the named field replaced:
+Records are updated functionally with bracket notation. `x[.FIELD = v]` produces
+a copy of `x` with the named field replaced:
 
 ```spectec
 def $enter_t(TC)
@@ -166,8 +166,8 @@ Nested fields can be updated in a single expression as well:
 
 ## Syntax Definitions
 
-The `syntax` keyword defines a grammar production, which is the abstract syntax of
-the language being specified.
+The `syntax` keyword defines a grammar production, which is the abstract syntax
+of the language being specified.
 
 ```spectec
 syntax type =
@@ -188,10 +188,9 @@ syntax expr =
 ```
 
 Each alternative is prefixed with `|`. Names starting with a lowercase letter
-refer to built-in types or *non-terminals*, which are built-in or previously
-declared syntax types.
-Uppercase names (like `INT`, `BOOL`) and backtick-prefixed tokens
-(like `` `NUM ``, `` `-> ``, `` `+ ``) are *terminals*.
+refer to built-in types or _non-terminals_, which are built-in or previously
+declared syntax types. Uppercase names (like `INT`, `BOOL`) and
+backtick-prefixed tokens (like `` `NUM ``, `` `-> ``, `` `+ ``) are _terminals_.
 
 ## Meta-variables
 
@@ -208,9 +207,9 @@ var c : command
 var t : type
 ```
 
-A variable's type is inferred from its name by stripping a trailing suffix
-that begins at the first `_` or `'` character. For example, given `var e : expr`,
-the following names are all valid `expr` variables:
+A variable's type is inferred from its name by stripping a trailing suffix that
+begins at the first `_` or `'` character. For example, given `var e : expr`, the
+following names are all valid `expr` variables:
 
 ```spectec
 rule Check_expr/add:
@@ -223,9 +222,9 @@ rule Check_expr/not:
   -- Check_expr: tenv |- e' : BOOL
 ```
 
-A suffix of only underscores (`e__`) or a purely alphanumeric suffix without
-a separator (`eLeft`) does not strip, so those would not be recognized as
-`expr` variables and would cause an error:
+A suffix of only underscores (`e__`) or a purely alphanumeric suffix without a
+separator (`eLeft`) does not strip, so those would not be recognized as `expr`
+variables and would cause an error:
 
 ```spectec
 rule Check_expr/not:
@@ -241,12 +240,12 @@ language being specified.
 
 **Boolean operators** work on `bool` meta-values:
 
-| Operator | Meaning |
-|----------|---------|
-| `~b`     | logical not |
+| Operator   | Meaning     |
+| ---------- | ----------- |
+| `~b`       | logical not |
 | `b1 /\ b2` | logical and |
-| `b1 \/ b2` | logical or |
-| `b1 = b2`  | equality |
+| `b1 \/ b2` | logical or  |
+| `b1 = b2`  | equality    |
 
 These appear in function bodies and `if` premises:
 
@@ -258,9 +257,9 @@ def $bin_op(`!=, value_l, value_r) = `B (~$bin_eq(value_l, value_r))
 -- if direction = OUT \/ direction = INOUT
 ```
 
-Note the distinction: `` `&& `` and `` `|| `` are *target-language terminals*
-(P4 operators in the syntax tree), while `/\` and `\/` are *meta-level*
-boolean operators used to write the spec itself.
+Note the distinction: `` `&& `` and `` `|| `` are _target-language terminals_
+(P4 operators in the syntax tree), while `/\` and `\/` are _meta-level_ boolean
+operators used to write the spec itself.
 
 **Arithmetic expressions** on `int` and `nat` meta-values are written inside
 `$( ... )`:
@@ -279,12 +278,11 @@ arithmetic rather than the target language's expression grammar.
 -- if |fieldValue_a*| = |fieldValue_b*|
 ```
 
-
 ## Function Declarations and Definitions
 
-Functions are declared with `dec` and defined with `def`. The declaration
-gives the name, argument types, and return type. Definitions provide
-pattern-matched cases. Each of those cases are called *clause*s.
+Functions are declared with `dec` and defined with `def`. The declaration gives
+the name, argument types, and return type. Definitions provide pattern-matched
+cases. Each of those cases are called *clause*s.
 
 ```spectec
 dec $lookup<K, V>(map<K, V>, K) : V?
@@ -307,15 +305,16 @@ A few things to note:
 - Function names are prefixed with `$`.
 - Angle brackets introduce type parameters (e.g. `<K, V>`). They must be made
   explicit in function calls.
-- The return type `V?` means an optional value (`eps` represents the absent case).
-- Each `def` case can have side conditions introduced with `if`, or a
-  catch-all `otherwise`.
-- On function call, each clause is evaluated from top to bottom. If pattern match
-  fails or `if` premises are not satisfied, the clause *fails* and tries the next
-  clause.
+- The return type `V?` means an optional value (`eps` represents the absent
+  case).
+- Each `def` case can have side conditions introduced with `if`, or a catch-all
+  `otherwise`.
+- On function call, each clause is evaluated from top to bottom. If pattern
+  match fails or `if` premises are not satisfied, the clause _fails_ and tries
+  the next clause.
 
-The `builtin` modifier marks functions whose implementation is provided by
-the toolchain rather than defined in the spec:
+The `builtin` modifier marks functions whose implementation is provided by the
+toolchain rather than defined in the spec:
 
 ```spectec
 builtin dec $sum_nat(nat*) : nat
@@ -323,7 +322,7 @@ builtin dec $sum_nat(nat*) : nat
 
 ## Relations and Rules
 
-A *relation* defines the signature for a set of *rules*.
+A _relation_ defines the signature for a set of _rules_.
 
 ```spectec
 ;; Type-check `expr` under context `tenv`
@@ -333,18 +332,18 @@ relation Check_expr:
   hint(prose_in "typechecking" %1 "under context" %0)
 ```
 
-This declares a judgment `tenv |- expr : type`, meaning "expression `expr`
-has type `type` under typing context `tenv`."
-The `|-` symbol (turnstile) is conventional notation borrowed from type theory.
-In P4-SpecTec, it is just a separator between the context and the subject.
+This declares a judgment `tenv |- expr : type`, meaning "expression `expr` has
+type `type` under typing context `tenv`." The `|-` symbol (turnstile) is
+conventional notation borrowed from type theory. In P4-SpecTec, it is just a
+separator between the context and the subject.
 
 `%0`, `%1`, etc. refer to the positional components of the judgment.
-`hint(input ...)` specifies which components are inputs to the relation.
-Here, `%0` (`tenv`) and `%1` (`expr`) are inputs, and `%2` (`type`) is the output.
+`hint(input ...)` specifies which components are inputs to the relation. Here,
+`%0` (`tenv`) and `%1` (`expr`) are inputs, and `%2` (`type`) is the output.
 
-*Rules* define *when* a relation holds.
-Each rule has a *conclusion* (the judgment being established) and zero or
-more *premises* (the conditions that must hold), introduced with `--`:
+_Rules_ define _when_ a relation holds. Each rule has a _conclusion_ (the
+judgment being established) and zero or more _premises_ (the conditions that
+must hold), introduced with `--`:
 
 ```spectec
 ;; If expression is integer literal, it has type INT
@@ -365,14 +364,14 @@ rule Check_expr/add:
   -- Check_expr: tenv |- e_r : INT
 ```
 
-The first rule has no premises; integer literals always have type `INT`.
-The second and third rules invoke `Check_expr` recursively as premises.
+The first rule has no premises; integer literals always have type `INT`. The
+second and third rules invoke `Check_expr` recursively as premises.
 
-Unlike traditional declarative inference rules where premises are unordered
-and existential witnesses may be guessed non-deterministically, P4-SpecTec
-rules are *algorithmic*: premises are executed in order, from top to bottom,
-and every value must be computed from already-known inputs.
-This makes rules directly executable as a type checker or interpreter.
+Unlike traditional declarative inference rules where premises are unordered and
+existential witnesses may be guessed non-deterministically, P4-SpecTec rules are
+_algorithmic_: premises are executed in order, from top to bottom, and every
+value must be computed from already-known inputs. This makes rules directly
+executable as a type checker or interpreter.
 
 An `if` premise introduces a side condition that does not invoke another
 relation:
@@ -384,11 +383,11 @@ rule Check_expr/id:
 ```
 
 The `=` in an `if` premise is overloaded: if the right-hand side is already
-known, it is a *check*; if it is an unbound meta-variable, it becomes a
-*binding* that computes the value from the left-hand side.
-Here, `t` is unbound, so `$lookup` is called and its result is bound to `t`,
-which is then used in the conclusion `tenv |- x : t`.
-If `$lookup` returns `eps` (absent), the rule *fails* and the next rule is tried.
+known, it is a _check_; if it is an unbound meta-variable, it becomes a
+_binding_ that computes the value from the left-hand side. Here, `t` is unbound,
+so `$lookup` is called and its result is bound to `t`, which is then used in the
+conclusion `tenv |- x : t`. If `$lookup` returns `eps` (absent), the rule
+_fails_ and the next rule is tried.
 
 Rules can mix `if` and relation premises freely:
 
@@ -399,15 +398,15 @@ rule Check_command/assign:
   -- if $lookup<id, type>(tenv, x) = t
 ```
 
-Here the relation premise `Check_expr` runs first and binds `t`, then the
-`if` premise checks that `x` is already declared with that same type.
+Here the relation premise `Check_expr` runs first and binds `t`, then the `if`
+premise checks that `x` is already declared with that same type.
 
 ## Rule Groups
 
 When several rules share the same conclusion shape but differ only in their
-premises, they can be grouped under a single `rulegroup` heading.
-This is purely organizational: the toolchain treats each case inside a
-`rulegroup` as an independent rule.
+premises, they can be grouped under a single `rulegroup` heading. This is purely
+organizational: the toolchain treats each case inside a `rulegroup` as an
+independent rule.
 
 For example, the typing rules for unary expressions in the nano-p4 spec are
 written as a rule group:
@@ -427,14 +426,14 @@ rulegroup Expr_ok/unaryExpression {
 }
 ```
 
-The outer `rulegroup Expr_ok/unaryExpression { ... }` names the group but
-adds no semantics.
-Each `rule` inside is a full, independent rule with its own name and premises.
+The outer `rulegroup Expr_ok/unaryExpression { ... }` names the group but adds
+no semantics. Each `rule` inside is a full, independent rule with its own name
+and premises.
 
 ## Set Membership
 
-The `<-` premise tests whether a value belongs to a list used as a set.
-It succeeds if the value matches any element and fails otherwise.
+The `<-` premise tests whether a value belongs to a list used as a set. It
+succeeds if the value matches any element and fails otherwise.
 
 ```spectec
 rule Expr_ok/integer:
@@ -459,12 +458,13 @@ def $distinct_params(parameterIR*)
 The `if` premise runs the pattern `_ _ nameIR = parameterIR` once per element,
 binding `nameIR` at each position and collecting the results into `nameIR*`.
 
-More advanced usages of iteration are to be demonstrated further into the tutorial.
+More advanced usages of iteration are to be demonstrated further into the
+tutorial.
 
 ## Prose Hints
 
-*Prose hints* are metadata annotations that guide the *prose backend* when generating
-human-readable documentation.
+_Prose hints_ are metadata annotations that guide the _prose backend_ when
+generating human-readable documentation.
 
 ```spectec
 relation Eval_expr:
@@ -487,5 +487,6 @@ We will cover the prose backend in more detail later in this tutorial.
 
 ## Exercise
 
-If you're interested in a more hands-on introduction, we strongly
-recommend you to go and complete the [SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6).
+If you're interested in a more hands-on introduction, we strongly recommend you
+to go and complete the
+[SpecTecX tutorial](https://github.com/kaist-plrg/spectecx/releases/tag/tutorial-rc6).

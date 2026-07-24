@@ -11,8 +11,8 @@ familiar, then come back when you need a reminder.
 
 ## Sequences
 
-A sequence (written `X*`) is an ordered list of elements.
-The empty sequence is `eps`, and `::` is the cons operator.
+A sequence (written `X*`) is an ordered list of elements. The empty sequence is
+`eps`, and `::` is the cons operator.
 
 ```spectec
 builtin dec $rev_<X>(X*) : X*
@@ -24,9 +24,9 @@ builtin dec $rev_<X>(X*) : X*
 builtin dec $distinct_<K>(K*) : bool
 ```
 
-`$distinct_` returns `true` if all elements in the sequence are unique.
-It is used to enforce no-duplicate-name constraints, for example checking that
-a parameter list does not repeat a name.
+`$distinct_` returns `true` if all elements in the sequence are unique. It is
+used to enforce no-duplicate-name constraints, for example checking that a
+parameter list does not repeat a name.
 
 ```spectec
 builtin dec $assoc_<X, Y>(X, (X, Y)*) : Y?
@@ -46,8 +46,8 @@ dec $exists_(bool*) : bool
 dec $forall_(bool*) : bool
 ```
 
-`$exists_` returns `true` if at least one element is `true`.
-`$forall_` returns `true` if all elements are `true`.
+`$exists_` returns `true` if at least one element is `true`. `$forall_` returns
+`true` if all elements are `true`.
 
 ## Sets
 
@@ -58,8 +58,8 @@ dec $empty_set<K> : set<K>
 dec $in_set<K>(set<K>, K) : bool
 ```
 
-`$empty_set` produces an empty set.
-`$in_set` checks whether a key is a member of a set.
+`$empty_set` produces an empty set. `$in_set` checks whether a key is a member
+of a set.
 
 ```spectec
 builtin dec $intersect_set<K>(set<K>, set<K>) : set<K>
@@ -98,9 +98,9 @@ builtin dec $find_maps<K, V>(map<K, V>*, K) : V?
 ```
 
 `$find_map` looks up a key in a single map and returns the value, or `eps` if
-not found.
-`$find_maps` searches a *sequence* of maps from left to right, returning the
-first match. This is used for variable lookup across a stack of frames.
+not found. `$find_maps` searches a _sequence_ of maps from left to right,
+returning the first match. This is used for variable lookup across a stack of
+frames.
 
 ```spectec
 builtin dec $add_map<K, V>(map<K, V>, K, V) : map<K, V>
@@ -109,6 +109,6 @@ builtin dec $update_map<K, V>(map<K, V>, K, V) : map<K, V>
 
 `$add_map` inserts a new key-value pair. The spec always checks that the key is
 not already present before calling `$add_map`, so it is effectively a
-no-overwrite insert.
-`$update_map` updates the value for an existing key. One example usage of this
-function is when writing to a variable that is already in scope.
+no-overwrite insert. `$update_map` updates the value for an existing key. One
+example usage of this function is when writing to a variable that is already in
+scope.

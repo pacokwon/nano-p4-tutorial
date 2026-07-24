@@ -1,17 +1,16 @@
 # Types
 
-In this section we explore how the type checker reasons about types.
-Two things in particular are of special interest:
-**well-formedness** and **equivalence**.
+In this section we explore how the type checker reasons about types. Two things
+in particular are of special interest: **well-formedness** and **equivalence**.
 
-The type checker needs to know two things about any type it encounters:
-whether the type is well-formed, and whether two types are the same.
-These two jobs are handled by two relations defined in
+The type checker needs to know two things about any type it encounters: whether
+the type is well-formed, and whether two types are the same. These two jobs are
+handled by two relations defined in
 [`5.02-typing-type.watsup`](https://github.com/pacokwon/nano-p4-spec/blob/main/5.02-typing-type.watsup).
 
 ## Type Elaboration: `Type_ok`
 
-The `Type_ok` relation *resolves* a surface-syntax type into its internal
+The `Type_ok` relation _resolves_ a surface-syntax type into its internal
 representation (`typeIR`).
 
 ```spectec
@@ -20,8 +19,8 @@ relation Type_ok:
   hint(input %0 %1)
 ```
 
-Read `typingContext |- type ~> typeIR` as: "under `typingContext`,
-the type `type` elaborates to the internal type `typeIR`."
+Read `typingContext |- type ~> typeIR` as: "under `typingContext`, the type
+`type` elaborates to the internal type `typeIR`."
 
 For base types, the rule is trivial: the surface type is already its own
 internal representation.
@@ -57,8 +56,8 @@ def $typeIR_of_typeDefIR(objectTypeDefIR)  = objectTypeDefIR
 
 Both clauses are identity-like: a `typeDefIR` is either a `dataTypeIR` or an
 `objectTypeDefIR`, and both are subtypes of `typeIR`, so the conversion just
-changes the tag.
-The function exists to make the type explicit to the elaboration rule.
+changes the tag. The function exists to make the type explicit to the
+elaboration rule.
 
 When a named type is resolved into its underlying type, not only do we know that
 it is a valid type, but the resolved information can be used somewhere else
@@ -66,8 +65,8 @@ along the type checking process.
 
 ### What `typeIR` looks like
 
-Understanding elaboration requires knowing what the internal type universe
-looks like.
+Understanding elaboration requires knowing what the internal type universe looks
+like.
 
 **Base types** need no further structure:
 
@@ -87,11 +86,11 @@ syntax headerTypeIR = HEADER typeId `{ fieldTypeIR* }
 ```
 
 Note that structs and headers carry both a `typeId` (the name the programmer
-gave them) and the full field list `fieldTypeIR*`.
-The name will matter for equality, as we will see below.
+gave them) and the full field list `fieldTypeIR*`. The name will matter for
+equality, as we will see below.
 
-**Object types** represent instantiable components (parsers, controls,
-packages, externs, tables):
+**Object types** represent instantiable components (parsers, controls, packages,
+externs, tables):
 
 ```spectec
 syntax parserObjectTypeIR  = PARSER  typeId `( parameterIR* )
@@ -122,10 +121,10 @@ rule Type_eq/baseTypeIR:
   baseTypeIR ~~ baseTypeIR
 ```
 
-Two base types are equal if and only if they are *syntactically identical*.
-`INT<8>` is not equal to `INT<16>`, and `BOOL` is not equal to `BIT<1>`.
-Pattern matching handles this: the same variable `baseTypeIR` appears on both
-sides, so the rule only fires when the two sides are the same term.
+Two base types are equal if and only if they are _syntactically identical_.
+`INT<8>` is not equal to `INT<16>`, and `BOOL` is not equal to `BIT<1>`. Pattern
+matching handles this: the same variable `baseTypeIR` appears on both sides, so
+the rule only fires when the two sides are the same term.
 
 ### Structs and headers
 
@@ -137,12 +136,12 @@ rule Type_eq/headerTypeIR:
   (HEADER typeId `{ _ }) ~~ (HEADER typeId `{ _ })
 ```
 
-Two struct/header types are equal when they share the same `typeId`.
-The field lists on both sides are wildcarded with `_` and ignored entirely.
+Two struct/header types are equal when they share the same `typeId`. The field
+lists on both sides are wildcarded with `_` and ignored entirely.
 
-This is *nominal equality*, not structural equality.
-If two independent structs happen to have identical fields but different names,
-they are not considered equal by this relation.
+This is _nominal equality_, not structural equality. If two independent structs
+happen to have identical fields but different names, they are not considered
+equal by this relation.
 
 Nominal equality is sound here because Nano-P4 uses a single global type
 definition environment: every type name maps to exactly one definition for the
@@ -159,9 +158,9 @@ rule Type_eq/externObjectTypeIR:
   (EXTERN typeId _) ~~ (EXTERN typeId _)
 ```
 
-Extern types are also compared by name only.
-As with structs, the global type environment guarantees that the same name
-always resolves to the same extern declaration.
+Extern types are also compared by name only. As with structs, the global type
+environment guarantees that the same name always resolves to the same extern
+declaration.
 
 ### Parsers, controls, and packages
 
@@ -179,18 +178,16 @@ rule Type_eq/packageObjectTypeIR:
   -- (ParameterType_eq: parameterIR_a ~~ parameterIR_b)*
 ```
 
-Parsers, controls, and packages are compared *structurally*: their names
-(the `_`) are ignored, and equality holds when the parameter lists are equal
-pairwise under `ParameterType_eq`.
+Parsers, controls, and packages are compared _structurally_: their names (the
+`_`) are ignored, and equality holds when the parameter lists are equal pairwise
+under `ParameterType_eq`.
 
-This is the opposite choice from how we compare structs/headers.
-For structs and headers, a type name is a declaration: two values have the same
-type only if they were declared under that exact name.
-Parsers and controls are different: a control type declaration describes an
-*interface*, and any control block that satisfies that interface is a valid
-implementation.
-The name of the implementing block is irrelevant; what matters is that its
-parameter list matches.
+This is the opposite choice from how we compare structs/headers. For structs and
+headers, a type name is a declaration: two values have the same type only if
+they were declared under that exact name. Parsers and controls are different: a
+control type declaration describes an _interface_, and any control block that
+satisfies that interface is a valid implementation. The name of the implementing
+block is irrelevant; what matters is that its parameter list matches.
 
 Consider:
 
@@ -221,9 +218,9 @@ rule ParameterType_eq:
   -- Type_eq: typeIR_a ~~ typeIR_b
 ```
 
-Two parameters are equal when they share the same *direction* and have equal
-types under `Type_eq`.
-The parameter name (the trailing `_`) is irrelevant for equality.
+Two parameters are equal when they share the same _direction_ and have equal
+types under `Type_eq`. The parameter name (the trailing `_`) is irrelevant for
+equality.
 
 ### Tables
 
@@ -236,7 +233,8 @@ Tables are compared by name, consistent with the other data types.
 
 ## Exercise
 
-**Branch:** [`exercise/3.2`](https://github.com/pacokwon/nano-p4-spec/tree/exercise/3.2)
+**Branch:**
+[`exercise/3.2`](https://github.com/pacokwon/nano-p4-spec/tree/exercise/3.2)
 
 Check out the exercise branch in the `spec` submodule:
 
@@ -251,8 +249,7 @@ Run the following test to observe the failure:
 ```
 
 The test program declares two variables with the same struct type and tries to
-assign one to the other.
-The checker should accept this, but it rejects it.
+assign one to the other. The checker should accept this, but it rejects it.
 
 Find the bug/missing rule in `5.02-typing-type.watsup` and fix it accordingly.
 

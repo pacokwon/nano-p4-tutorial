@@ -1,12 +1,14 @@
 # P4-SpecTec
 
-[P4-SpecTec](https://github.com/kaist-plrg/p4-spectec) is a mechanization toolchain for the P4 programming language.
-It provides a domain-specific language for writing formal specifications in the form of *algorithmic inference rules*.
+[P4-SpecTec](https://github.com/kaist-plrg/p4-spectec) is a mechanization
+toolchain for the P4 programming language. It provides a domain-specific
+language for writing formal specifications in the form of _algorithmic inference
+rules_.
 
-By writing typing rules with P4-SpecTec, you get a reference type checker.
-By writing dynamic semantics rules, you get a reference interpreter.
-The *prose backend* also allows one to generate a human-readable documentation
-from a specification written in P4-SpecTec.
+By writing typing rules with P4-SpecTec, you get a reference type checker. By
+writing dynamic semantics rules, you get a reference interpreter. The _prose
+backend_ also allows one to generate a human-readable documentation from a
+specification written in P4-SpecTec.
 
 In this chapter, we will cover the following:
 

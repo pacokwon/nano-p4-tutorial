@@ -13,16 +13,16 @@ relation Expr_ok:
   hint(input %0 %1 %2)
 ```
 
-Read `scope TC |- e : T` as: "under context `TC` at scope `scope`, expression `e`
-has type `T`."
+Read `scope TC |- e : T` as: "under context `TC` at scope `scope`, expression
+`e` has type `T`."
 
 The `scope` argument threads through many rules so that variable lookup (which
 delegates to `$find_var_t`) can consult the right layers of the typing context.
 
 ## Literal Expressions
 
-The simplest rules are the literal cases.
-Boolean literals always have type `BOOL`:
+The simplest rules are the literal cases. Boolean literals always have type
+`BOOL`:
 
 ```spectec
 rule Expr_ok/boolean:
@@ -39,7 +39,8 @@ rule Expr_ok/integer-signed:
   scope TC |- nat S int : INT `< nat >
 ```
 
-As for what `TC` means, refer to [The `TC` Meta-variable](./typing-context.md#the-tc-meta-variable).
+As for what `TC` means, refer to
+[The `TC` Meta-variable](./typing-context.md#the-tc-meta-variable).
 
 ## Reference Expressions
 
@@ -54,19 +55,19 @@ rule Expr_ok/referenceExpression:
 
 The two premises are:
 
-1. Transform `name` into `id`. `id` is an alias for `text`, and `$id` turns
-   a name into text.
-2. Look it up via `$find_var_t` and get back a `varTypeIR`, which is a pair
-   of `direction` and `typeIR`.
-   The direction is wildcarded with `_` because reading a variable has no
-   direction constraint.
+1. Transform `name` into `id`. `id` is an alias for `text`, and `$id` turns a
+   name into text.
+2. Look it up via `$find_var_t` and get back a `varTypeIR`, which is a pair of
+   `direction` and `typeIR`. The direction is wildcarded with `_` because
+   reading a variable has no direction constraint.
 
-The `scope` argument to `$find_var_t` is the same one passed into `Expr_ok`,
-so lookup follows the correct scope chain automatically.
+The `scope` argument to `$find_var_t` is the same one passed into `Expr_ok`, so
+lookup follows the correct scope chain automatically.
 
 ## Unary Expressions
 
-Nano-P4 has two kinds of unary operators: boolean negation and integer operators.
+Nano-P4 has two kinds of unary operators: boolean negation and integer
+operators.
 
 ```spectec
 rulegroup Expr_ok/unaryExpression {
@@ -84,11 +85,10 @@ rulegroup Expr_ok/unaryExpression {
 ```
 
 Both rules check that the operand has the expected type and propagate the same
-type to the result.
-`!` only works on booleans; `~`, `-`, and `+` work on any integer type
-(`BIT<n>` or `INT<n>`), and the result has the same integer type.
+type to the result. `!` only works on booleans; `~`, `-`, and `+` work on any
+integer type (`BIT<n>` or `INT<n>`), and the result has the same integer type.
 
-The `if unop <- [...]` premise is a *membership check*: it confirms that the
+The `if unop <- [...]` premise is a _membership check_: it confirms that the
 operator in question is one of the listed tokens.
 
 ## Binary Expressions
@@ -103,10 +103,10 @@ rule Expr_ok/arithmetic:
   -- Expr_ok: scope TC |- expression_r : integerTypeIR
 ```
 
-Arithmetic operators (`*`, `+`, `-`) require both operands to have the *same*
-integer type and produce that type.
-The variable `integerTypeIR` appears in all three positions, so pattern matching
-enforces that both operands share *exactly the same type*.
+Arithmetic operators (`*`, `+`, `-`) require both operands to have the _same_
+integer type and produce that type. The variable `integerTypeIR` appears in all
+three positions, so pattern matching enforces that both operands share _exactly
+the same type_.
 
 ```spectec
 rule Expr_ok/comparison:
@@ -116,9 +116,9 @@ rule Expr_ok/comparison:
   -- Expr_ok: scope TC |- expression_r : integerTypeIR
 ```
 
-Comparison operators consume integers and produce `BOOL`.
-The same variable `integerTypeIR` appears in both premises, so both operands
-must have exactly the same integer type, just as with arithmetic operators.
+Comparison operators consume integers and produce `BOOL`. The same variable
+`integerTypeIR` appears in both premises, so both operands must have exactly the
+same integer type, just as with arithmetic operators.
 
 ```spectec
 rule Expr_ok/equality:
@@ -129,9 +129,9 @@ rule Expr_ok/equality:
 ```
 
 Equality operators accept any base type (`INT<n>`, `BIT<n>`, `BOOL`,
-`MATCH_KIND`), not just integers, and return `BOOL`.
-The same variable `baseTypeIR` appears in both premises, so both operands must
-have exactly the same base type.
+`MATCH_KIND`), not just integers, and return `BOOL`. The same variable
+`baseTypeIR` appears in both premises, so both operands must have exactly the
+same base type.
 
 ```spectec
 rule Expr_ok/bitwise:
@@ -155,9 +155,8 @@ Logical operators require both operands to be `BOOL` and return `BOOL`.
 
 ## Member Access
 
-Member access is written `expr.field`.
-The result type is determined by looking up the field name in the struct or
-header definition:
+Member access is written `expr.field`. The result type is determined by looking
+up the field name in the struct or header definition:
 
 ```spectec
 rule Expr_ok/struct:
@@ -177,8 +176,10 @@ rule Expr_ok/header:
 
 Both rules follow the same shape:
 
-1. Type-check the base expression and get back a struct or header type `typeIR_base`.
-2. Destructure `typeIR_base` to extract its field list `(typeIR_field id_field)*`.
+1. Type-check the base expression and get back a struct or header type
+   `typeIR_base`.
+2. Destructure `typeIR_base` to extract its field list
+   `(typeIR_field id_field)*`.
 3. Convert the member token to an `id_member`.
 4. Look up `id_member` in the field association list with `$assoc_<id, typeIR>`.
 
@@ -188,8 +189,8 @@ matches either `STRUCT _ { ... }` or `HEADER _ { ... }`, not both.
 ## Call Expressions
 
 Nano-P4 only supports two kinds of call expressions: parser and control
-instantiation via constructor invocation.
-These appear in the package argument list (e.g., `NanoSwitch(Parser(), Filter())`).
+instantiation via constructor invocation. These appear in the package argument
+list (e.g., `NanoSwitch(Parser(), Filter())`).
 
 ```spectec
 rule Expr_ok/parser:
@@ -205,14 +206,13 @@ rule Expr_ok/control:
 
 Both rules look up `typeId` in the callable type definition environment with
 `$find_callableTypeDef_t`. By the time they are called, the parser/control
-declaration should have been registered as a callable.
-If the callable is a parser, the result is a `PARSER` object type; if it is a
-control, the result is a `CONTROL` object type.
-Both carry the type name and the parameter list, which are used later when
-typechecking the enclosing package instantiation.
+declaration should have been registered as a callable. If the callable is a
+parser, the result is a `PARSER` object type; if it is a control, the result is
+a `CONTROL` object type. Both carry the type name and the parameter list, which
+are used later when typechecking the enclosing package instantiation.
 
 The argument list is always `EMPTY` here because parser/control blocks in
-Nano-P4 do not have *constructor parameters*, and therefore do not accept
+Nano-P4 do not have _constructor parameters_, and therefore do not accept
 arguments during instantiation.
 
 ## Parenthesized Expressions
@@ -229,9 +229,9 @@ the type of the inner expression.
 ## L-values
 
 An l-value is an expression that names a storage location and can appear on the
-left-hand side of an assignment.
-The `Lvalue_ok` relation in `5.04-typing-lvalue.watsup` determines whether
-an expression qualifies as an l-value and what type it holds:
+left-hand side of an assignment. The `Lvalue_ok` relation in
+`5.04-typing-lvalue.watsup` determines whether an expression qualifies as an
+l-value and what type it holds:
 
 ```spectec
 relation Lvalue_ok:
@@ -259,13 +259,13 @@ rule Lvalue_ok/referenceExpression:
 ```
 
 This rule adds a constraint that `Expr_ok/referenceExpression` does not have:
-the direction must be `OUT` or `INOUT`.
-`IN` and directionless (`EMPTY`) variables cannot appear on the left of an
-assignment because they are read-only.
+the direction must be `OUT` or `INOUT`. `IN` and directionless (`EMPTY`)
+variables cannot appear on the left of an assignment because they are read-only.
 
 ### Member Access L-values
 
-The rules for member access l-values are left as [an exercise](#exercise). Have fun!
+The rules for member access l-values are left as [an exercise](#exercise). Have
+fun!
 
 ### Parenthesized L-values
 
@@ -279,7 +279,8 @@ Like parenthesized expressions, parentheses around an l-value are transparent.
 
 ## Exercise
 
-**Branch:** [`exercise/3.3`](https://github.com/pacokwon/nano-p4-spec/tree/exercise/3.3)
+**Branch:**
+[`exercise/3.3`](https://github.com/pacokwon/nano-p4-spec/tree/exercise/3.3)
 
 Check out the exercise branch in the `spec` submodule:
 
@@ -294,14 +295,13 @@ Run the following test to observe the failure:
 ```
 
 The test program assigns to a member of a struct field that is an `INOUT`
-parameter.
-The checker should accept this, but results in an error instead.
+parameter. The checker should accept this, but results in an error instead.
 
-The `Lvalue_ok/structTypeIR` and `Lvalue_ok/headerTypeIR` rules are missing
-from `5.04-typing-lvalue.watsup`.
+The `Lvalue_ok/structTypeIR` and `Lvalue_ok/headerTypeIR` rules are missing from
+`5.04-typing-lvalue.watsup`.
 
-> **Hint:**
-> Write them by analogy with `Expr_ok/struct` and `Expr_ok/header` in `5.03-typing-expression.watsup`.
+> **Hint:** Write them by analogy with `Expr_ok/struct` and `Expr_ok/header` in
+> `5.03-typing-expression.watsup`.
 
 When you are done, restore the original branch:
 

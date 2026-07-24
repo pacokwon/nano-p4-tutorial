@@ -1,11 +1,12 @@
 # Test Suite
 
-A test suite for Nano-P4 lives in `nano-p4/testdata/` and is split into two directories:
+A test suite for Nano-P4 lives in `nano-p4/testdata/` and is split into two
+directories:
 
 - `positive/`: 32 nano-p4 programs that are expected to type-check and produce
-               correct output
+  correct output
 - `negative/`: 21 nano-p4 programs that are expected to be rejected by the type
-               checker
+  checker
 
 ## Positive tests
 
@@ -54,8 +55,8 @@ control Filter(inout Header hdr, out bool pass) {
 NanoSwitch(Parser(), Filter()) main;
 ```
 
-Its companion `table-const-entries.stf` sends three packets and asserts which ones
-are forwarded:
+Its companion `table-const-entries.stf` sends three packets and asserts which
+ones are forwarded:
 
 ```
 packet 0 010000
@@ -67,19 +68,19 @@ packet 0 050000
 expect 0 050000
 ```
 
-The first packet (packetType = 0x00) matches entry `7w0` and
-is dropped, hence the absence of a corresponding `expect` directive.
-The second packet (packetType = 0x01) matches entry `7w1` and is forwarded.
-The third packet (packetType = 0x05) has no matching entry. `pass` stays
-`true` from the default and the packet is forwarded.
+The first packet (packetType = 0x00) matches entry `7w0` and is dropped, hence
+the absence of a corresponding `expect` directive. The second packet (packetType
+= 0x01) matches entry `7w1` and is forwarded. The third packet (packetType =
+0x05) has no matching entry. `pass` stays `true` from the default and the packet
+is forwarded.
 
 ## Negative tests
 
 Negative tests are `.p4` files only. There is no `.stf` companion because the
 program should not get past typechecking.
 
-For example, `bit-arith-mixed-widths.p4` attempts arithmetic between operands
-of different widths:
+For example, `bit-arith-mixed-widths.p4` attempts arithmetic between operands of
+different widths:
 
 ```p4
 #include <nano_model.p4>
@@ -128,5 +129,5 @@ $ ./nano-p4spectec test-check nano-p4/spec/*.watsup \
     -p4-dir nano-p4/testdata/negative
 ```
 
-As you write new spec rules, re-running these commands is the primary way
-to check correctness.
+As you write new spec rules, re-running these commands is the primary way to
+check correctness.

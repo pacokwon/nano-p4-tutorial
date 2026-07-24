@@ -7,26 +7,26 @@ file).
 ## Overview
 
 ```
-  .watsup files          .p4 file
-       │                    │
-       ▼                    ▼
-  ┌─────────┐          ┌─────────┐
-  │  elab   │          │  parse  │
-  └────┬────┘          └────┬────┘
-       │                    │
-       ▼                    ▼
-   spec (IL)         program (IL value)
-       │                    │
-       └──────────┬─────────┘
-                  │
-                  ▼
-           ┌─────────────┐
-           │ interpreter │
-           └──────┬──────┘
-                  │
-                  ▼
-            relation result
-         (pass / fail / packets)
+.watsup files                    .p4 file
+     │                              │
+     ▼                              ▼
+┌─────────┐                    ┌─────────┐
+│  elab   │                    │  parse  │
+└────┬────┘                    └────┬────┘
+     │                              │
+     ▼                              ▼
+ spec (IL)                   program (IL value)
+     │                              │
+     └───────────────┬──────────────┘
+                     │
+                     ▼
+              ┌─────────────┐
+              │ interpreter │
+              └──────┬──────┘
+                     │
+                     ▼
+               relation result
+            (pass / fail / packets)
 ```
 
 There are two independent compilation steps, and the interpreter joins their
@@ -34,13 +34,13 @@ outputs.
 
 ## Step 1: Elaborate the spec
 
-The `.watsup` files are parsed and *elaborated* into *IL* (Internal Language),
-a type-checked and desugared representation of the spec that the interpreter
+The `.watsup` files are parsed and _elaborated_ into _IL_ (Internal Language), a
+type-checked and desugared representation of the spec that the interpreter
 executes directly.
 
-*Elaboration* checks that the spec itself
-is well-formed: syntax definitions are consistent, rule conclusions match their
-relation signatures, function clauses are well-typed, and so on.
+_Elaboration_ checks that the spec itself is well-formed: syntax definitions are
+consistent, rule conclusions match their relation signatures, function clauses
+are well-typed, and so on.
 
 You can run this step in isolation with:
 
@@ -51,9 +51,10 @@ $ ./nano-p4spectec elab nano-p4/spec/*.watsup
 ## Step 2: Parse the program
 
 The `.p4` source file is parsed by the Nano-P4 parser into a **P4-SpecTec IL
-value**. It is a tree of constructor tags and nested values that directly mirrors
-the `syntax` definitions in the spec. Because it is a value in the same language
-that the spec is written in, the interpreter can pass it directly to spec relations.
+value**. It is a tree of constructor tags and nested values that directly
+mirrors the `syntax` definitions in the spec. Because it is a value in the same
+language that the spec is written in, the interpreter can pass it directly to
+spec relations.
 
 You can inspect this value with:
 
@@ -99,6 +100,7 @@ program % %
                         ├── 8
                         └── +42
 ```
+
 </details>
 
 ## Step 3: Interpret
@@ -123,7 +125,7 @@ entire program. Therefore, we are executing the typechecker against a program.
   elaboration, before the program is touched.
 - A **parse error** means the `.p4` file is not valid Nano-P4 syntax.
 - A **runtime error** means the interpreter got stuck executing the spec against
-  the program.
-  This is typically due to a rule that has no matching case for the given input.
+  the program. This is typically due to a rule that has no matching case for the
+  given input.
 - A **test failure** from `sim` means the spec's dynamic semantics produced
   different output packets than the STF file expected.

@@ -1,8 +1,8 @@
 # Syntax Definition in P4-SpecTec
 
 With the scope of Nano-P4 in mind, let us see how its syntax is expressed in
-P4-SpecTec.
-The full syntax is defined in [`1-syntax.watsup`](https://github.com/pacokwon/nano-p4-spec/blob/main/1-syntax.watsup).
+P4-SpecTec. The full syntax is defined in
+[`1-syntax.watsup`](https://github.com/pacokwon/nano-p4-spec/blob/main/1-syntax.watsup).
 Reading it will also give you a feel for what P4-SpecTec `syntax` definitions
 look like at scale before we move into the type-checking and evaluation rules.
 
@@ -10,18 +10,18 @@ look like at scale before we move into the type-checking and evaluation rules.
 
 Every `syntax` production in P4-SpecTec is built from two kinds of atoms.
 
-**Non-terminals** are references to other `syntax` productions.
-They appear as lowercase names, for example `expression`, `type`, or `name`.
+**Non-terminals** are references to other `syntax` productions. They appear as
+lowercase names, for example `expression`, `type`, or `name`.
 
-**Terminals** are concrete tokens of the language being specified.
-They appear in two forms:
+**Terminals** are concrete tokens of the language being specified. They appear
+in two forms:
 
 - **Keyword terminals** are written in ALL_CAPS: `IF`, `ELSE`, `STRUCT`,
-  `PARSER`, `CONTROL`, and so on.
-  These correspond to reserved keywords in Nano-P4.
+  `PARSER`, `CONTROL`, and so on. These correspond to reserved keywords in
+  Nano-P4.
 - **Punctuation terminals** are written with a leading backtick: `` `( ``,
-  `` `) ``, `` `{ ``, `` `} ``, `` `; ``, `` `. ``, `` `= ``, and so on.
-  The backtick distinguishes a literal token from the syntax of P4-SpecTec.
+  `` `) ``, `` `{ ``, `` `} ``, `` `; ``, `` `. ``, `` `= ``, and so on. The
+  backtick distinguishes a literal token from the syntax of P4-SpecTec.
 
 For example, the production for an assignment statement:
 
@@ -29,8 +29,8 @@ For example, the production for an assignment statement:
 syntax assignmentStatement = lvalue `= expression `;
 ```
 
-reads as: an assignment is an `lvalue` non-terminal, followed by the literal
-`=` token, followed by an `expression` non-terminal, followed by the literal `;`
+reads as: an assignment is an `lvalue` non-terminal, followed by the literal `=`
+token, followed by an `expression` non-terminal, followed by the literal `;`
 token.
 
 ## Literals
@@ -47,10 +47,10 @@ syntax integerLiteral =
   | nat S int
 ```
 
-`TRUE` and `FALSE` are terminals.
-Integer literals carry two pieces of metadata: a width `nat` and a value `int`.
-The `W` terminal marks an unsigned bit-string and `S` a signed integer.
-These correspond to `bit<N>` and `int<N>` literals in source Nano-P4.
+`TRUE` and `FALSE` are terminals. Integer literals carry two pieces of metadata:
+a width `nat` and a value `int`. The `W` terminal marks an unsigned bit-string
+and `S` a signed integer. These correspond to `bit<N>` and `int<N>` literals in
+source Nano-P4.
 
 ## Identifiers
 
@@ -78,10 +78,10 @@ syntax name = nonTypeName
 ```
 
 `nonTypeName` adds the contextual keywords `APPLY`, `KEY`, `ACTIONS`, and
-`STATE` as valid identifiers: they are reserved in some positions but can
-appear as plain names in others.
-`typeName` is just a `typeIdentifier` wrapped for clarity.
-`name` collapses to `nonTypeName`, which is what most of the spec refers to.
+`STATE` as valid identifiers: they are reserved in some positions but can appear
+as plain names in others. `typeName` is just a `typeIdentifier` wrapped for
+clarity. `name` collapses to `nonTypeName`, which is what most of the spec
+refers to.
 
 ## Types
 
@@ -101,11 +101,9 @@ syntax type =
 ```
 
 `integerType` captures `bit<N>` and `int<N>` with the width stored as an `int`
-meta-value directly in the syntax tree.
-`baseType` bundles integer types with the two keyword types `BOOL` and
-`MATCH_KIND`.
-`type` is the union of base types and named types (structs and headers resolved
-by name).
+meta-value directly in the syntax tree. `baseType` bundles integer types with
+the two keyword types `BOOL` and `MATCH_KIND`. `type` is the union of base types
+and named types (structs and headers resolved by name).
 
 ## Parameters
 
@@ -128,9 +126,9 @@ syntax parameterList =
   | nonEmptyParameterList
 ```
 
-The `` `EMPTY `` here is a P4-SpecTec internal sentinel, not a P4 keyword.
-It is a terminal token in the grammar, but it will never appear in a real
-Nano-P4 source file.
+The `` `EMPTY `` here is a P4-SpecTec internal sentinel, not a P4 keyword. It is
+a terminal token in the grammar, but it will never appear in a real Nano-P4
+source file.
 
 ```spectec
 syntax nonEmptyParameterList =
@@ -142,9 +140,8 @@ Any sequence of productions such as `nonEmptyParameterList` is represented in
 left-recursive form to reflect the Yacc/Bison style of grammar used in P4.
 
 However, it is necessary to convert these to right recursive lists to access
-elements from left to right.
-Therefore, alongside the syntax, the spec defines a helper function to flatten a
-`parameterList` into a flat list `parameter*`:
+elements from left to right. Therefore, alongside the syntax, the spec defines a
+helper function to flatten a `parameterList` into a flat list `parameter*`:
 
 ```spectec
 dec $flatten_parameterList(parameterList) : parameter*
@@ -156,14 +153,14 @@ def $flatten_parameterList(nonEmptyParameterList `, parameter)
 
 This pattern, a `dec` / `def` pair that recursively accumulates elements into a
 list, appears throughout `1-syntax.watsup` for every list-valued production:
-`nameList`, `argumentList`, `statementList`, and so on.
-The type checker and evaluator call these helpers instead of pattern-matching on
-the recursive list syntax directly.
+`nameList`, `argumentList`, `statementList`, and so on. The type checker and
+evaluator call these helpers instead of pattern-matching on the recursive list
+syntax directly.
 
 ## Expressions
 
-Expressions form the most layered part of the grammar.
-The spec defines them in named groups before assembling them under `expression`:
+Expressions form the most layered part of the grammar. The spec defines them in
+named groups before assembling them under `expression`:
 
 ```spectec
 syntax expression =
@@ -220,10 +217,9 @@ syntax lvalue =
 ```
 
 L-values are a strict subset of expressions: a variable reference, a member
-access rooted at an l-value, or a parenthesized l-value.
-The spec keeps `lvalue` separate from `expression` so that the type checker
-can enforce assignment rules without inspecting the expression structure at
-every call site.
+access rooted at an l-value, or a parenthesized l-value. The spec keeps `lvalue`
+separate from `expression` so that the type checker can enforce assignment rules
+without inspecting the expression structure at every call site.
 
 ## Statements
 
@@ -244,10 +240,10 @@ syntax conditionalStatement =
   IF `( expression ) blockStatement ELSE blockStatement
 ```
 
-This directly encodes the Nano-P4 restriction noted in the scope section:
-`if` without `else` is not allowed.
+This directly encodes the Nano-P4 restriction noted in the scope section: `if`
+without `else` is not allowed.
 
-Unlike P4, `variableDeclaration` *requires* an initializer:
+Unlike P4, `variableDeclaration` _requires_ an initializer:
 
 ```spectec
 syntax initializer = `= expression
@@ -258,7 +254,8 @@ syntax variableDeclaration =
 
 ## Declarations
 
-Nano-P4 has the following top-level declaration forms, each with its own production:
+Nano-P4 has the following top-level declaration forms, each with its own
+production:
 
 ```spectec
 syntax declaration =
@@ -303,9 +300,9 @@ syntax program =
   | program declaration
 ```
 
-As with all list productions, a `$flatten_program` helper converts it to a
-flat `declaration*` that the rest of the spec consumes.
+As with all list productions, a `$flatten_program` helper converts it to a flat
+`declaration*` that the rest of the spec consumes.
 
-With this syntax definition in hand, the type checker and evaluator can refer
-to every Nano-P4 construct by name, and the spec stays readable as the rules
-grow more complex in the chapters ahead.
+With this syntax definition in hand, the type checker and evaluator can refer to
+every Nano-P4 construct by name, and the spec stays readable as the rules grow
+more complex in the chapters ahead.

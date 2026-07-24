@@ -4,10 +4,9 @@ This section covers
 [`5.05-typing-statement.watsup`](https://github.com/pacokwon/nano-p4-spec/blob/main/5.05-typing-statement.watsup),
 which type-checks all statements in Nano-P4.
 
-`Statement_ok` uses a *threading* pattern: each rule takes an
-incoming context and produces an outgoing one.
-That being said, only variable declarations extend the context, while others simply
-pass the context.
+`Statement_ok` uses a _threading_ pattern: each rule takes an incoming context
+and produces an outgoing one. That being said, only variable declarations extend
+the context, while others simply pass the context.
 
 ```spectec
 relation Statement_ok:
@@ -57,9 +56,8 @@ rule Statement_ok/variableDeclaration:
    direction as `INOUT`.
 
 The direction `INOUT` is unconditional here: all local variables in Nano-P4 are
-read-write by default.
-This is distinct from parameters, which carry an explicit direction from their
-declaration.
+read-write by default. This is distinct from parameters, which carry an explicit
+direction from their declaration.
 
 The outgoing context `TC_1` is what the rest of the block sees, so any
 subsequent statement can refer to the newly declared variable.
@@ -90,15 +88,15 @@ rule Statement_ok/callStatement-name:
   -- Call_convention_ok: parameterIR* `@ argumentIR*
 ```
 
-An action call like `myAction()` looks up the callable in the context,
-extracts its parameter list, type-checks the arguments, and checks the calling
+An action call like `myAction()` looks up the callable in the context, extracts
+its parameter list, type-checks the arguments, and checks the calling
 convention.
 
 `ArgumentList_ok` type-checks each argument expression in `argumentList` and
 yields `argumentIR*`, where `arugumentIR` is a pair of the argument expression
-and its resolved `typeIR`. `Call_convention_ok` verifies that argument directions
-and types match the parameters. Both of these relations are covered in the next
-section.
+and its resolved `typeIR`. `Call_convention_ok` verifies that argument
+directions and types match the parameters. Both of these relations are covered
+in the next section.
 
 ### Extern Method
 
@@ -118,9 +116,9 @@ rule Statement_ok/callStatement-member:
   -- Call_convention_ok: parameterIR* `@ argumentIR*
 ```
 
-A method call like `pkt.extract(hdr)` resolves the base expression to an
-extern type, looks up the method name in the extern's method environment, and
-then checks arguments against the method's parameter list.
+A method call like `pkt.extract(hdr)` resolves the base expression to an extern
+type, looks up the method name in the extern's method environment, and then
+checks arguments against the method's parameter list.
 
 `$expression_of_lvalue` converts the syntactic `lvalue_base` into an
 `expression` before passing it to `Expr_ok`, since the two are distinct
@@ -139,9 +137,8 @@ rule Statement_ok/callStatement-table-apply:
 ```
 
 A table apply call like `tbl.apply()` only needs to confirm that the base
-expression has a table type.
-No argument or parameter checking is needed: table apply takes no arguments in
-Nano-P4.
+expression has a table type. No argument or parameter checking is needed: table
+apply takes no arguments in Nano-P4.
 
 ## Block Statement
 
@@ -154,9 +151,8 @@ rule Statement_ok/blockStatement:
 ```
 
 A block statement pushes a new scope frame with `$enter_t` before checking the
-body, then pops it with `$exit_t` afterward.
-The outgoing context `TC_2` has the same shape as `TC_0`: any variables
-declared inside the block are discarded.
+body, then pops it with `$exit_t` afterward. The outgoing context `TC_2` has the
+same shape as `TC_0`: any variables declared inside the block are discarded.
 
 The body is checked by `Block_ok`, which flattens the `statementList` and
 threads the context through each statement in sequence:
@@ -177,14 +173,13 @@ rule Statements_ok/cons:
 ```
 
 `Statements_ok` threads the context left to right: each statement receives the
-context produced by the previous one.
-Notice that `Statement_ok` is always called with `LOCAL` scope inside
-`Statements_ok/cons`, because statements inside a block body live in the local
-scope layer.
+context produced by the previous one. Notice that `Statement_ok` is always
+called with `LOCAL` scope inside `Statements_ok/cons`, because statements inside
+a block body live in the local scope layer.
 
-Also notice that `Block_ok` does not call `$enter_t`/`$exit_t` itself.
-The frame push and pop happen in `Statement_ok/blockStatement`, one level up.
-`Block_ok` receives a context that already has the new frame on the stack.
+Also notice that `Block_ok` does not call `$enter_t`/`$exit_t` itself. The frame
+push and pop happen in `Statement_ok/blockStatement`, one level up. `Block_ok`
+receives a context that already has the new frame on the stack.
 
 ## Conditional Statement
 
@@ -198,10 +193,10 @@ rule Statement_ok/conditionalStatement:
 ```
 
 An `if`/`else` statement checks that the condition has type `BOOL`, then checks
-both branches independently under the same incoming context `TC`.
-The two branches do not see each other's declarations, and neither escapes to
-the enclosing scope: both `Block_ok` premises call `$enter_t`/`$exit_t`
-internally (via `Statement_ok/blockStatement`).
+both branches independently under the same incoming context `TC`. The two
+branches do not see each other's declarations, and neither escapes to the
+enclosing scope: both `Block_ok` premises call `$enter_t`/`$exit_t` internally
+(via `Statement_ok/blockStatement`).
 
 The outgoing context is the same `TC` that came in.
 
@@ -221,11 +216,27 @@ Run the following test to observe the failure:
 ./nano-p4spectec check nano-p4/spec/*.watsup -i nano-p4/include -p nano-p4/testdata/exercise/3.4.p4
 ```
 
-The test program contains a valid assignment statement, but the checker rejects it.
+The test program contains a valid assignment statement, but the checker rejects
+it.
 
 The `Statement_ok/assignmentStatement` rule in
 [`5.05-typing-statement.watsup`](https://github.com/pacokwon/nano-p4-spec/blob/main/5.05-typing-statement.watsup)
 has been omitted entirely. Write the rule from scratch.
+
+There are three tests for this exercise: `3.4.p4`, `3.4.1.p4`, `3.4.2.p4`. The
+latter two tests are negative tests, so they must be rejected by the
+typechecker.
+
+```shell
+./nano-p4spectec check nano-p4/spec/*.watsup -i nano-p4/include -p nano-p4/testdata/exercise/3.4.p4
+# should pass!
+
+./nano-p4spectec check nano-p4/spec/*.watsup -i nano-p4/include -p nano-p4/testdata/exercise/3.4.1.p4
+# should fail!
+
+./nano-p4spectec check nano-p4/spec/*.watsup -i nano-p4/include -p nano-p4/testdata/exercise/3.4.2.p4
+# should fail!
+```
 
 When you are done, restore the original branch:
 

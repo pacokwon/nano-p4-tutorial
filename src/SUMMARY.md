@@ -1,6 +1,7 @@
 # Summary
 
 [Overview](./overview.md)
+
 - [P4-SpecTec](./spectec/README.md)
   - [Installation](./spectec/installation.md)
   - [Basics](./spectec/basics.md)
@@ -17,6 +18,11 @@
   - [Types](./static/types.md)
   - [Expressions and L-values](./static/expressions-lvalues.md)
   - [Statements](./static/statements.md)
+  - [Parameters and Arguments](./static/parameters-arguments.md)
+  - [Declarations](./static/declarations.md)
+  - [Parsers](./static/parsers.md)
+  - [Controls]()
+  - [Tables]()
 - [Dynamic Semantics]()
 - [Tips for Debugging]()
 - [Generating Prose Specification]()

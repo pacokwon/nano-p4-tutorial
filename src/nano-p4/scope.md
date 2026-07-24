@@ -1,7 +1,8 @@
 # Scope of Nano-P4
 
-This section describes what Nano-P4 includes and what it leaves out.
-For a reference of Nano-P4's grammar, consult [Appendix A: Nano-P4 Grammar](./grammar.md)
+This section describes what Nano-P4 includes and what it leaves out. For a
+reference of Nano-P4's grammar, consult
+[Appendix A: Nano-P4 Grammar](./grammar.md)
 
 ## What Nano-P4 includes
 
@@ -9,11 +10,12 @@ For a reference of Nano-P4's grammar, consult [Appendix A: Nano-P4 Grammar](./gr
 
 Nano-P4 supports the following types:
 
-- **Boolean** :  `bool`
-- **Fixed-width integers** :  `bit<N>` and `int<N>` where `N` is a compile-time constant
-- **`match_kind`** :  the built-in kind used to annotate table key fields
-- **Struct types** :  declared with `struct`
-- **Header types** :  declared with `header`
+- **Boolean** : `bool`
+- **Fixed-width integers** : `bit<N>` and `int<N>` where `N` is a compile-time
+  constant
+- **`match_kind`** : the built-in kind used to annotate table key fields
+- **Struct types** : declared with `struct`
+- **Header types** : declared with `header`
 
 Named types (structs and headers) can be used anywhere a type is expected.
 
@@ -24,21 +26,23 @@ Nano-P4 supports a standard set of expressions:
 - Boolean and integer literals
 - Variable references
 - Unary operators: `!`, `~`, `-`, `+`
-- Binary operators: arithmetic (`*`, `+`, `-`), comparison (`<`, `<=`, `>`, `>=`, `==`, `!=`), and bitwise/logical (`&`, `|`, `^`, `&&`, `||`)
+- Binary operators: arithmetic (`*`, `+`, `-`), comparison (`<`, `<=`, `>`,
+  `>=`, `==`, `!=`), and bitwise/logical (`&`, `|`, `^`, `&&`, `||`)
 - Member access: `expr.field`
 - Function and extern calls: `f(args)`
 - Parenthesized expressions
 
 ### Statements
 
-Inside parser states, control apply blocks, and action bodies, the following statements are available:
+Inside parser states, control apply blocks, and action bodies, the following
+statements are available:
 
 - Empty statement (`;`)
 - Variable declaration with mandatory initializer: `type name = expr;`
 - Assignment: `lvalue = expr;`
 - Call statement: `lvalue(args);`
 - Block: `{ ... }`
-- Conditional: `if (expr) { ... } else { ... }` :  both branches are required
+- Conditional: `if (expr) { ... } else { ... }` : both branches are required
 
 ### Actions
 
@@ -50,13 +54,14 @@ action drop(inout Header hdr) {
 }
 ```
 
-Actions must be declared at the top level of the program.
-Nested action declarations (inside a control block) are not supported.
+Actions must be declared at the top level of the program. Nested action
+declarations (inside a control block) are not supported.
 
 ### Tables
 
-Tables are supported in a limited but usable form.
-A table must have a `key` property and an `actions` property, and may optionally have a `const entries` property:
+Tables are supported in a limited but usable form. A table must have a `key`
+property and an `actions` property, and may optionally have a `const entries`
+property:
 
 ```p4
 table t {
@@ -69,15 +74,18 @@ table t {
 ```
 
 Restrictions compared to full P4:
+
 - Exactly one key field (the key block takes a single `expr : match_kind` entry)
-- Control plane operations are not supported.
-  That means runtime extension of table entries is not possible.
+- Control plane operations are not supported. That means runtime extension of
+  table entries is not possible.
 - No `default_action`, `size`, or other table properties
-- Tables can only be declared inside a control block as a local declaration, not at the top level
+- Tables can only be declared inside a control block as a local declaration, not
+  at the top level
 
 ### Parser block
 
-Parser declarations are fully supported, including multiple named states and `select` expressions for branching:
+Parser declarations are fully supported, including multiple named states and
+`select` expressions for branching:
 
 ```p4
 parser MyParser(packet_in pkt, out Header hdr) {
@@ -94,11 +102,13 @@ parser MyParser(packet_in pkt, out Header hdr) {
 }
 ```
 
-A parser state body consists of zero or more variable declarations followed by a `transition` statement.
+A parser state body consists of zero or more variable declarations followed by a
+`transition` statement.
 
 ### Control block
 
-Control declarations are supported. A control may contain local variable declarations and table declarations, followed by an `apply` block:
+Control declarations are supported. A control may contain local variable
+declarations and table declarations, followed by an `apply` block:
 
 ```p4
 control MyControl(inout Header hdr, out bool pass) {
@@ -112,7 +122,7 @@ control MyControl(inout Header hdr, out bool pass) {
 ### Extern declarations
 
 Extern object types (used to declare things like `packet_in`) can be declared
-with method prototypes, but *not* constructors:
+with method prototypes, but _not_ constructors:
 
 ```p4
 extern packet_in {
